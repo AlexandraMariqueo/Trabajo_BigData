@@ -136,10 +136,13 @@ library(xlsx)
 write.xlsx(todosLosDatosPs4, "todosLosDatosPs4 en xls_1.xlsx")
 write.xlsx(todosLosDatosXbox, "todosLosDatosXbox en xls_1.xlsx")
 
+############################################################################
+
 # Trabajo_BigData_TiendaParis
 
 # Configuracion espacio de trabajo#
 setwd("C:/Users/samon/Desktop/universidad/2020/Segundo semestre/Big data/trabajofinal_bigdata")
+
 
 #instalarndo Rvest
 install.packages("rvest")
@@ -149,105 +152,105 @@ install.packages("gdata")
 library(rvest)
 library(gdata)
 
-# descargar datos de la pagina paris para la investigacion de la playstation 4
-
+# DESCARGANDO PAGINA TIENDA PARIS (JUEGOS PS4)
 paris <- read_html("https://www.paris.cl/tecnologia/consolas-videojuegos/juegos/juegos-ps4/playstation/")
 
+# LISTADO DE PRODUCTOS PS4
 listadoJuegosParis <- html_node(paris, css = "#primary")
 
-# titulos de los productos
+# TITULOS DE LOS PRODUCTOS PS4
 titulosParis <- html_nodes(listadoJuegosParis, ".ellipsis_text")
-textTitulosParis <- html_text(titulosParis)
+textoTitulosParis <- html_text(titulosParis)
 
-for (n in 1:length(textTitulosParis)) {
-  print(textTitulosParis[n])
+for (n in 1:length(textoTitulosParis)) {
+  print(textoTitulosParis[n])
+}
+
+# PRECIOS DE LOS PRODUCTOS PS4
+preciosParis <- html_nodes(listadoJuegosParis, ".price-tc")
+textoPreciosParis <- html_text(preciosParis)
+
+for (k in 1:length(textoPreciosParis)) {
+  print(textoPreciosParis[k])
 }
 
 
-# precios de los productos
-preciosParis <- html_nodes(listadoJuegosParis, ".price")
-textPreciosParis <- html_text(preciosParis)
+# [ALMACENANDO INFORMACION 1] CREACION DE UN DATAFRAME DE PS4
+todosLosDatosParis <- data.frame()
 
-for (k in 1:length(textPreciosParis)) {
-  print(textPreciosParis[k])
-}
-
-# [almacenando informacion 1] creacion de un dataframe
-
-todosLosDatos <- data.frame()
-
-
-for (i in 1:length(textTitulosParis)) {
+for (i in 1:length(textoTitulosParis)) {
   print("========== ITEM ==========")
   
   # nombre del juego:
-  print(textTitulosParis[i])
+  print(textoTitulosParis[i])
   
   # precio:
-  textPreciosParis <- gsub("[.]","",textPreciosParis)
-  textPreciosParis <- as.character(textPreciosParis)
-  print(textPreciosParis[i])
+  textoPreciosParis <- gsub("[.]","",textoPreciosParis)
+  textoPreciosParis <- as.character(textoPreciosParis)
+  print(textoPreciosParis[i])
   
-  # [almacenando informacion 2] creando dataframe con los detalles
-  # de cada item
+  # [ALMACENANDO INFORMACION 2] CREANDO DATAFRAME CON LOS DETALLES
+  # DE CADA ITEM
   
-  itemParis <- data.frame(titulosParis = textTitulosParis, preciosParis = textPreciosParis)
+  itemParis <- data.frame(titulosParis = textoTitulosParis,
+                        preciosParis = textoPreciosParis,
+                        plataforma = "PlayStation 4")
   
-  # [almacenando informacion 3] almacenando la info del producto con 
-  # con los datos totales
+  # [ALMACENANDO INFORMACION 3] ALMACENANDO LA INFO DEL PRODUCTO CON 
+  # LOS DATOS TOTALES
   
-  todosLosDatos <- rbind(todosLosDatos,itemParis)
+  todosLosDatosParis <- rbind(todosLosDatosParis,itemParis)
   break = 40
 }
 
 
-# descargar datos de la pagina paris para la investigacion de la Xbox one
-
+# DESCARGANDO PAGINA TIENDA PARIS (JUEGOS XBOX ONE)
 parisxbox <- read_html("https://www.paris.cl/tecnologia/consolas-videojuegos/juegos/xbox/")
 
+# LISTADO DE PRODUCTOS XBOX ONE
 listadoJuegosParisxbox <- html_node(parisxbox, css = "#search-result-items")
 
-# titulos de los productos
+# TITULOS DE LOS PRODUCTOS XBOX ONE
 titulosParisxbox <- html_nodes(listadoJuegosParisxbox, ".name-product-plp")
-textTitulosParisxbox <- html_text(titulosParisxbox)
+textoTitulosParisxbox <- html_text(titulosParisxbox)
 
-for (n in 1:length(textTitulosParisxbox)) {
-  print(textTitulosParisxbox[n])
+for (n in 1:length(textoTitulosParisxbox)) {
+  print(textoTitulosParisxbox[n])
 }
 
-
-# precios de los productos
+# PRECIOS DE LOS PRODUCTOS XBOX ONE
 preciosParisxbox <- html_nodes(listadoJuegosParisxbox, ".default-price")
-textPreciosParisxbox <- html_text(preciosParisxbox)
+textoPreciosParisxbox <- html_text(preciosParisxbox)
 
-for (k in 1:length(textPreciosParisxbox)) {
-  print(textPreciosParisxbox[k])
+for (k in 1:length(textoPreciosParisxbox)) {
+  print(textoPreciosParisxbox[k])
 }
 
-# [almacenando informacion 1] creacion de un dataframe
+# [ALMACENANDO INFORMACION 1] CREACION DE UN DATAFRAME DE XBOX ONE
+todosLosDatosParisxbox <- data.frame()
 
-todosLosDatosxbox <- data.frame()
-
-
-for (i in 1:length(textTitulosParisxbox)) {
+for (u in 1:length(textoTitulosParisxbox)) {
   print("========== ITEM ==========")
   
   # nombre del juego:
-  print(textTitulosParisxbox[i])
+  print(textoTitulosParisxbox[u])
   
   # precio:
-  textPreciosParisxbox <- gsub("[.]","",textPreciosParisxbox)
-  textPreciosParisxbox <- as.character(textPreciosParisxbox)
-  print(textPreciosParisxbox[i])
+  textoPreciosParisxbox <- gsub("[.]","",textoPreciosParisxbox)
+  textoPreciosParisxbox <- as.character(textoPreciosParisxbox)
+  print(textoPreciosParisxbox[u])
   
-  # [almacenando informacion 2] creando dataframe con los detalles
-  # de cada item
+  # [ALMACENANDO INFORMACION 2] CREANDO DATAFRAME CON LOS DETALLES
+  # DE CADA ITEM
   
-  itemParisxbox <- data.frame(titulosParisxbox = textTitulosParisxbox, preciosParisxbox = textPreciosParisxbox)
+  itemParisxbox <- data.frame(titulosParisxbox = textoTitulosParisxbox, 
+                         precioParisxbox= textoPreciosParisxbox,
+                         plataforma = "XBOX ONE")
   
-  # [almacenando informacion 3] almacenando la info del producto con 
-  # con los datos totales
+  # [ALMACENANDO INFORMACION 3] ALMACENANDO LA INFO DEL PRODUCTO CON 
+  # LOS DATOS TOTALES
   
-  todosLosDatosxbox <- rbind(todosLosDatosxbox,itemParisxbox)
+  todosLosDatosParisxbox <- rbind(todosLosDatosParisxbox,itemParisxbox)
   break = 15
+  
 }
